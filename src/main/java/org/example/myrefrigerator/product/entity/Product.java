@@ -1,8 +1,7 @@
-package org.example.myrefrigerator.refrigerator.entity;
+package org.example.myrefrigerator.product.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.myrefrigerator.RefrigeratorProduct.entity.RefrigeratorProduct;
@@ -12,27 +11,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "refrigerator")
+@Table(name = "products")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Refrigerator extends BaseEntity {
+public class Product extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "owner_id", nullable = false)
-    private Long ownerId;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "category", nullable = false)
+    private ProductCategory category;
 
-    @OneToMany(mappedBy = "refrigerator")
+    @OneToMany(mappedBy = "product")
     private List<RefrigeratorProduct> refrigeratorProducts = new ArrayList<>();
 
-    @Builder
-    private Refrigerator(String name, Long ownerId) {
+    public Product(String name, ProductCategory category) {
         this.name = name;
-        this.ownerId = ownerId;
+        this.category = category;
     }
 
+    public static Product create(String name, ProductCategory category) {
+        return new Product(name, category);
+    }
 }

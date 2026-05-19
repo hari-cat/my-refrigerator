@@ -37,4 +37,12 @@ public class Product extends BaseEntity {
     public static Product create(String name, ProductCategory category) {
         return new Product(name, category);
     }
+
+    public void changeName(String name) {
+        this.name = name;
+    }
+
+    public void moveCategory(ProductCategory category){
+        this.category = category;
+    }
 }

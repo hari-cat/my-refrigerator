@@ -34,7 +34,7 @@ public class ProductService {
     public void updateProduct(Long id, ProductUpdateRequest request){
         Product result = productRepository.findById(id).orElseThrow(()->new IllegalArgumentException("찾으시는 상품이 없습니다."));
 
-        if (request.name() != null) {
+        if (request.name() != null && request.name().isBlank()) {
             result.changeName(result.getName());
         }
         if (request.category() != null) {

@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.myrefrigerator.product.dto.ProductCreateRequest;
 import org.example.myrefrigerator.product.dto.ProductResponse;
+import org.example.myrefrigerator.product.dto.ProductUpdateRequest;
 import org.example.myrefrigerator.product.service.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,11 +20,17 @@ public class ProductController {
     @PostMapping
     public ResponseEntity<String> createProduct(@Valid @RequestBody ProductCreateRequest request){
         productService.createProduct(request);
-        return ResponseEntity.ok("Product register success");
+        return ResponseEntity.ok("상품정보가 등록되었습니다.");
     }
 
     @GetMapping
     public ResponseEntity<List<ProductResponse>> getProducts(){
         return ResponseEntity.ok(productService.getProducts());
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<String> updateProducts(@PathVariable(required = true) Long id, @RequestBody ProductUpdateRequest request) {
+        productService.updateProduct(id, request);
+        return ResponseEntity.ok("상품정보가 업데이트 되었습니다.");
     }
 }

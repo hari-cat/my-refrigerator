@@ -1,6 +1,7 @@
 package org.example.myrefrigerator.product.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.myrefrigerator.global.dto.Status;
 import org.example.myrefrigerator.product.dto.ProductCreateRequest;
 import org.example.myrefrigerator.product.dto.ProductResponse;
 import org.example.myrefrigerator.product.dto.ProductUpdateRequest;
@@ -27,7 +28,7 @@ public class ProductService {
     }
 
     public List<ProductResponse> getProducts(){
-        return productRepository.findAll().stream().map(ProductResponse::from).toList();
+        return productRepository.findProductByStatus(Status.ACTIVE).stream().map(ProductResponse::from).toList();
     }
 
     @Transactional

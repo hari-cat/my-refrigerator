@@ -1,4 +1,4 @@
-name: CI
+name: CI-CD
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     permissions:
@@ -46,18 +46,15 @@ jobs:
           docker push \
             ghcr.io/${{ github.repository_owner }}/my-refrigerator:latest
 
-      - name: Deploy to Home Server (SSH)
+      - name: Deploy to Home Server
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /home/ubuntu/app  # docker-compose.yml 있는 경로
+            cd /Users/harizoa/Desktop/home-server
 
-            docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
+            docker compose pull
 
-            docker pull ghcr.io/${{ github.repository_owner }}/my-refrigerator:latest
-
-            docker compose down
-            docker compose up -d
+            docker compose up -d --remove-orphans

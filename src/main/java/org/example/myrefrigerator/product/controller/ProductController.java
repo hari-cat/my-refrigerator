@@ -29,8 +29,14 @@ public class ProductController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<String> updateProducts(@PathVariable(required = true) Long id, @RequestBody ProductUpdateRequest request) {
+    public ResponseEntity<String> updateProduct(@PathVariable(required = true) Long id, @RequestBody ProductUpdateRequest request) {
         productService.updateProduct(id, request);
         return ResponseEntity.ok("상품정보가 업데이트 되었습니다.");
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteProduct(@PathVariable(required = true) Long id){
+        productService.deleteProduct(id);
+        return ResponseEntity.ok("상품이 삭제되었습니다.");
     }
 }

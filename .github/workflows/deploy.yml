@@ -45,3 +45,19 @@ jobs:
         run: |
           docker push \
             ghcr.io/${{ github.repository_owner }}/my-refrigerator:latest
+
+      - name: Deploy to Home Server (SSH)
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /home/ubuntu/app  # docker-compose.yml 있는 경로
+
+            docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
+
+            docker pull ghcr.io/${{ github.repository_owner }}/my-refrigerator:latest
+
+            docker compose down
+            docker compose up -d

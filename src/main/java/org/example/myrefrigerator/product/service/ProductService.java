@@ -42,4 +42,10 @@ public class ProductService {
         }
     }
 
+    @Transactional
+    public void deleteProduct(Long id){
+        Product result = productRepository.findById(id).orElseThrow(()->new IllegalArgumentException("찾으시는 상품이 없습니다."));
+        result.delete();
+    }
+
 }

@@ -1,3 +1,5 @@
+jwt:
+  secret: ${JWT_SECRET}
 spring:
   profiles:
     active: local
@@ -15,6 +17,9 @@ spring:
   security:
     user:
       password: ${SECURITY_PASSWORD}
+#    oauth2:
+#      client:
+#        registration:
 
 server:
   port: 8080

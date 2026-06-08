@@ -18,10 +18,10 @@ public class RefrigeratorService {
     private final RefrigeratorRepository refrigeratorRepository;
 
     @Transactional
-    public void saveRefrigerator(RefrigeratorRegisterRequest request) {
-        Refrigerator refrigerator = Refrigerator.builder().name(request.name()).ownerId(request.ownerId()).build();
+    public void saveRefrigerator(Long ownerId, RefrigeratorRegisterRequest request) {
+        Refrigerator refrigerator = Refrigerator.builder().name(request.name()).ownerId(ownerId).build();
 
-        if (refrigeratorRepository.existsRefrigeratorsByOwnerIdAndStatus(request.ownerId(), Status.ACTIVE)) {
+        if (refrigeratorRepository.existsRefrigeratorsByOwnerIdAndStatus(ownerId, Status.ACTIVE)) {
             throw new BusinessException(RefrigeratorErrorCode.REFRIGERATOR_IS_EXIST);
         }
 

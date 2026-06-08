@@ -28,7 +28,7 @@ public class JwtProvider {
     public String createAccessToken(Long userId, String role){
         Date now = new Date();
 
-        Date expired = new Date(now.getTime() + 1000L * 60 * 5);
+        Date expired = new Date(now.getTime() + 1000L * 60 * 30);
 
         return Jwts.builder()
                 .subject(userId.toString())

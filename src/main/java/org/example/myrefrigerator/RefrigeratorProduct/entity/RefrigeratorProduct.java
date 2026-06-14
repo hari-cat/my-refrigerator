@@ -54,13 +54,9 @@ public class RefrigeratorProduct extends BaseEntity {
 
     }
 
-    public int addQuantity(int quantity) {
-        int result = this.quantity + quantity;
+    public void addQuantity(int quantity) {
+        if (quantity < 0) throw new IllegalStateException("재고가 부족합니다.");
 
-        if (result < 0) throw new IllegalStateException("재고가 부족합니다.");
-
-        this.quantity = result;
-
-        return result;
+        this.quantity = quantity;
     }
 }

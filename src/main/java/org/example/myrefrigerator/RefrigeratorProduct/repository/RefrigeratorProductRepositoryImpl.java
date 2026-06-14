@@ -18,14 +18,14 @@ public class RefrigeratorProductRepositoryImpl implements RefrigeratorProductCus
 
     private final JPAQueryFactory jpaQueryFactory;
     @Override
-    public Page<RefrigeratorProduct> search(RefrigeratorProductSearchCondition condition, Pageable pageable) {
+    public Page<RefrigeratorProduct> search(Long refrigeratorId, RefrigeratorProductSearchCondition condition, Pageable pageable) {
 
 
         List<RefrigeratorProduct> contents = jpaQueryFactory
                 .selectFrom(refrigeratorProduct)
                 .join(refrigeratorProduct.product, product)
                 .where(
-                        refrigeratorIdEq(condition.refrigeratorId()),
+                        refrigeratorIdEq(refrigeratorId),
                         categoryEq(condition.category()),
                         containName(condition.name()),
                         refrigeratorProduct.status.eq(Status.ACTIVE)
@@ -40,7 +40,7 @@ public class RefrigeratorProductRepositoryImpl implements RefrigeratorProductCus
                 .from(refrigeratorProduct)
                 .join(refrigeratorProduct.product, product)
                 .where(
-                        refrigeratorIdEq(condition.refrigeratorId()),
+                        refrigeratorIdEq(refrigeratorId),
                         categoryEq(condition.category()),
                         containName(condition.name()),
                         refrigeratorProduct.status.eq(Status.ACTIVE)

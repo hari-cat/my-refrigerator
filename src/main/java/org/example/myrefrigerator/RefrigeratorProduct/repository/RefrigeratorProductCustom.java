@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface RefrigeratorProductCustom {
     Page<RefrigeratorProduct> search(
+            Long refrigeratorId,
             RefrigeratorProductSearchCondition condition,
             Pageable pageable
     );

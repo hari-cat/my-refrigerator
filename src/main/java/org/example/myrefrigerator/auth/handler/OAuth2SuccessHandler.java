@@ -57,6 +57,18 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                 )
         );
 
+        Cookie accessCookie =
+                new Cookie(
+                        "accessToken",
+                        accessToken
+                );
+
+        accessCookie.setHttpOnly(true);
+        accessCookie.setPath("/");
+        accessCookie.setMaxAge(60 * 30);
+
+        response.addCookie(accessCookie);
+
         Cookie refreshCookie =
                 new Cookie(
                         "refreshToken",
@@ -74,16 +86,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         response.setContentType("application/json");
 
-        response.getWriter().write("""
-                {
-                  "message":"login success",
-                }
-                """ + accessToken);
-
-//        response.sendRedirect(
-//                "http://localhost:3000/login/success"
-//                        + "?accessToken="
-//                        + accessToken
-//        );
+        response.sendRedirect(
+                "http://localhost:3000/refrigerator"
+        );
     }
 }

@@ -2,6 +2,7 @@ package org.example.myrefrigerator.auth.jwt;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -26,16 +27,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String bearer = request.getHeader(HttpHeaders.AUTHORIZATION);
-
-        if (bearer == null || !bearer.startsWith("Bearer ")) {
-            filterChain.doFilter(
-                    request, response
-            );
-
-            return;
-        }
-        String token = bearer.substring(7);
+        String token = resolveToken(request);
 
         if (!jwtProvider.validateToken(token)) {
             filterChain.doFilter(request,response);
@@ -64,5 +56,28 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         CustomOAuth2User principal = new CustomOAuth2User(user);
 
         return new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
+    }
+
+    private String resolveToken(HttpServletRequest request) {
+
+        String bearer =
+                request.getHeader(HttpHeaders.AUTHORIZATION);
+
+        if (bearer != null &&
+                bearer.startsWith("Bearer ")) {
+            return bearer.substring(7);
+        }
+
+        Cookie[] cookies = request.getCookies();
+
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("accessToken".equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+
+        return null;
     }
 }

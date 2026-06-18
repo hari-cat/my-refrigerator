@@ -42,15 +42,19 @@ public class RefrigeratorProduct extends BaseEntity {
     @Column(name = "expired_at", nullable = false)
     private LocalDate expiredAt;
 
-    public RefrigeratorProduct(Refrigerator refrigerator, Product product, int quantity, LocalDate expiredAt) {
+    @Column(name = "origin")
+    private String origin;
+
+    public RefrigeratorProduct(Refrigerator refrigerator, Product product, int quantity, LocalDate expiredAt, String origin) {
         this.refrigerator = refrigerator;
         this.product = product;
         this.quantity = quantity;
         this.expiredAt = expiredAt;
+        this.origin = origin;
     }
 
     public static RefrigeratorProduct create(Refrigerator refrigerator, Product product, RefrigeratorProductCreateRequest request) {
-        return new RefrigeratorProduct(refrigerator, product, request.quantity(), request.expiredAt());
+        return new RefrigeratorProduct(refrigerator, product, request.quantity(), request.expiredAt(), request.origin());
 
     }
 

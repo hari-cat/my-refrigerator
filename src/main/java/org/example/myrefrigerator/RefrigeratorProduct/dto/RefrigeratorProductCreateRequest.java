@@ -9,6 +9,7 @@ public record RefrigeratorProductCreateRequest(
         Long productId,
         @NotNull
         int quantity,
-        LocalDate expiredAt
+        LocalDate expiredAt,
+        String origin
 ) {
 }

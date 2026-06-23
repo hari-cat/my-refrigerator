@@ -2,12 +2,14 @@ package org.example.myrefrigerator.RefrigeratorProduct.repository;
 
 import org.example.myrefrigerator.RefrigeratorProduct.entity.RefrigeratorProduct;
 import org.example.myrefrigerator.global.dto.Status;
+import org.example.myrefrigerator.refrigerator.entity.Refrigerator;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
-public interface RefrigeratorProductRepository extends JpaRepository<RefrigeratorProduct, Long>, RefrigeratorProductCustom{
+public interface RefrigeratorProductRepository extends JpaRepository<RefrigeratorProduct, Long>, RefrigeratorProductCustom {
     Optional<RefrigeratorProduct>
     findByRefrigeratorIdAndProductIdAndExpiredAt(
             Long refrigeratorId,
@@ -15,5 +17,11 @@ public interface RefrigeratorProductRepository extends JpaRepository<Refrigerato
             LocalDate expiredAt
     );
 
-    Optional<RefrigeratorProduct> findRefrigeratorProductByIdAndStatus(Long id, Status status);
+    Optional<RefrigeratorProduct> findRefrigeratorProductByIdAndRefrigeratorAndStatus(Long id, Refrigerator refrigerator, Status status);
+    @Query(
+            """
+    select count(*) from RefrigeratorProduct r where r.refrigerator.id = :refrigeratorId and r.status = 'ACTIVE' and r.expiredAt < SYSDATE()
+"""
+    )
+    long countExpiredProducts(Long refrigeratorId);
 }

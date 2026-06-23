@@ -6,11 +6,10 @@ import java.time.LocalDate;
 
 public record RefrigeratorProductCreateRequest(
         @NotNull
-        Long refrigeratorId,
-        @NotNull
         Long productId,
         @NotNull
         int quantity,
-        LocalDate expiredAt
+        LocalDate expiredAt,
+        String origin
 ) {
 }

@@ -13,4 +13,5 @@ public interface RefrigeratorRepository extends JpaRepository <Refrigerator, Lon
                 SELECT r FROM Refrigerator r WHERE r.ownerId = :ownerId AND r.status = "ACTIVE"
             """)
     Optional<Refrigerator> findActiveRefrigerator(Long ownerId);
+
 }

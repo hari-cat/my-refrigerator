@@ -63,4 +63,16 @@ public class RefrigeratorProduct extends BaseEntity {
 
         this.quantity = quantity;
     }
+
+    @Override
+    public String toString() {
+        return "RefrigeratorProduct{" +
+                "id=" + id +
+                ", refrigerator=" + refrigerator +
+                ", product=" + product +
+                ", quantity=" + quantity +
+                ", expiredAt=" + expiredAt +
+                ", origin='" + origin + '\'' +
+                '}';
+    }
 }

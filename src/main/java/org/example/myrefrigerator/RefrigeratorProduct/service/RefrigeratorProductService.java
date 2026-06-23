@@ -3,10 +3,7 @@ package org.example.myrefrigerator.RefrigeratorProduct.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.myrefrigerator.RefrigeratorProduct.RefrigeratorProductErrorCode;
-import org.example.myrefrigerator.RefrigeratorProduct.dto.RefrigeratorProductCreateRequest;
-import org.example.myrefrigerator.RefrigeratorProduct.dto.RefrigeratorProductResponse;
-import org.example.myrefrigerator.RefrigeratorProduct.dto.RefrigeratorProductSearchCondition;
-import org.example.myrefrigerator.RefrigeratorProduct.dto.UpdateQuantityRequest;
+import org.example.myrefrigerator.RefrigeratorProduct.dto.*;
 import org.example.myrefrigerator.RefrigeratorProduct.entity.RefrigeratorProduct;
 import org.example.myrefrigerator.RefrigeratorProduct.repository.RefrigeratorProductRepository;
 import org.example.myrefrigerator.global.dto.Status;
@@ -58,9 +55,11 @@ public class RefrigeratorProductService {
     public Page<RefrigeratorProductResponse> getRefrigeratorProducts(Long userId, RefrigeratorProductSearchCondition condition, Pageable pageable) {
         Refrigerator refrigerator = getRefrigerator(userId);
 
-        log.debug("refrigerator={}", refrigerator);
+        log.info("refrigerator={}", refrigerator);
 
         Page<RefrigeratorProduct> result = refrigeratorProductRepository.search(refrigerator.getId(), condition, pageable);
+
+        log.info("result={}", result.getContent());
 
         return result.map(RefrigeratorProductResponse::from);
 
@@ -84,6 +83,14 @@ public class RefrigeratorProductService {
 
         result.addQuantity(0);
         result.delete();
+    }
+
+    public StaticsRefrigeratorResponse retrieveRefrigeratorStatistics(Long userId){
+        Refrigerator refrigerator = getRefrigerator(userId);
+
+        long expiredProductCount = refrigeratorProductRepository.countExpiredProducts(refrigerator.getId());
+
+        return StaticsRefrigeratorResponse.from(10, 1, expiredProductCount);
     }
 
     public Refrigerator getRefrigerator(Long userId) {

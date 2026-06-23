@@ -2,10 +2,8 @@ package org.example.myrefrigerator.RefrigeratorProduct.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.myrefrigerator.RefrigeratorProduct.dto.RefrigeratorProductCreateRequest;
-import org.example.myrefrigerator.RefrigeratorProduct.dto.RefrigeratorProductResponse;
-import org.example.myrefrigerator.RefrigeratorProduct.dto.RefrigeratorProductSearchCondition;
-import org.example.myrefrigerator.RefrigeratorProduct.dto.UpdateQuantityRequest;
+import lombok.extern.slf4j.Slf4j;
+import org.example.myrefrigerator.RefrigeratorProduct.dto.*;
 import org.example.myrefrigerator.RefrigeratorProduct.service.RefrigeratorProductService;
 import org.example.myrefrigerator.auth.oauth.CustomOAuth2User;
 import org.example.myrefrigerator.global.dto.PageResponse;
@@ -16,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/refrigerator-product")
@@ -47,5 +46,12 @@ public class RefrigeratorProductController {
     public ResponseEntity<String> deleteRefrigeratorProduct(@AuthenticationPrincipal CustomOAuth2User user, @PathVariable Long id){
         refrigeratorProductService.deleteRefrigeratorProduct(user.getId(), id);
         return ResponseEntity.ok("해당 상품이 냉장고에서 제거되었습니다.");
+    }
+
+    @GetMapping("/statics")
+    public ResponseEntity<StaticsRefrigeratorResponse> retrieveRefrigeratorStatistics(@AuthenticationPrincipal CustomOAuth2User user){
+        log.info("entry");
+        StaticsRefrigeratorResponse result = refrigeratorProductService.retrieveRefrigeratorStatistics(user.getId());
+        return ResponseEntity.ok(result);
     }
 }

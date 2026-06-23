@@ -18,10 +18,18 @@ public interface RefrigeratorProductRepository extends JpaRepository<Refrigerato
     );
 
     Optional<RefrigeratorProduct> findRefrigeratorProductByIdAndRefrigeratorAndStatus(Long id, Refrigerator refrigerator, Status status);
+
     @Query(
             """
-    select count(*) from RefrigeratorProduct r where r.refrigerator.id = :refrigeratorId and r.status = 'ACTIVE' and r.expiredAt < SYSDATE()
-"""
+                        select count(*) from RefrigeratorProduct r where r.refrigerator.id = :refrigeratorId and r.status = 'ACTIVE' and r.expiredAt < CURRENT_TIMESTAMP
+                    """
     )
     long countExpiredProducts(Long refrigeratorId);
+
+    @Query(
+            """
+                        select count(*) from RefrigeratorProduct r where r.refrigerator.id = :refrigeratorId and r.status = 'ACTIVE' and r.expiredAt between CURRENT_TIMESTAMP and :fiveDaysLater
+                    """
+    )
+    long countExpiringProducts(Long refrigeratorId, LocalDate fiveDaysLater);
 }

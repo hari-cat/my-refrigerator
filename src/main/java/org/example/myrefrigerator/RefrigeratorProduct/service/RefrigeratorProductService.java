@@ -18,6 +18,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -85,12 +87,15 @@ public class RefrigeratorProductService {
         result.delete();
     }
 
-    public StaticsRefrigeratorResponse retrieveRefrigeratorStatistics(Long userId){
+    public StaticsRefrigeratorResponse retrieveRefrigeratorStatistics(Long userId) {
         Refrigerator refrigerator = getRefrigerator(userId);
 
         long expiredProductCount = refrigeratorProductRepository.countExpiredProducts(refrigerator.getId());
 
-        return StaticsRefrigeratorResponse.from(10, 1, expiredProductCount);
+        LocalDate fiveDaysLater = LocalDate.now().plusDays(5);
+        long expiringProductCount = refrigeratorProductRepository.countExpiringProducts(refrigerator.getId(), fiveDaysLater);
+
+        return StaticsRefrigeratorResponse.from(10, expiringProductCount, expiredProductCount);
     }
 
     public Refrigerator getRefrigerator(Long userId) {
